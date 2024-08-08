@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, render_template, request
 import requests
 import json
 
@@ -7,53 +7,13 @@ app = Flask(__name__)
 # Variable global para almacenar el refreshToken
 stored_refresh_token = None
 
+############################### Execute index HTML page ###############################
+
 @app.route('/')
 def index():
-    return '''
-        <html>
-        <body>
-            <button onclick="fetchRefreshToken()">Obtener Refresh Token</button>
-            <button onclick="refreshAccessToken()">Actualizar Acceso</button>
-            <p id="response"></p>
-            <script>
-                function fetchRefreshToken() {
-                    fetch('/get_refresh_token')
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.refreshToken) {
-                                document.getElementById('response').innerText = 'Refresh Token: ' + data.refreshToken;
-                                // Guardar el refreshToken en una variable global de JavaScript
-                                window.refreshToken = data.refreshToken;
-                            } else {
-                                document.getElementById('response').innerText = 'Error: ' + data.error;
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
-                }
+    return render_template('index.html')
 
-                function refreshAccessToken() {
-                    if (window.refreshToken) {
-                        fetch('/refresh_access_token', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': 'Bearer ' + window.refreshToken
-                            },
-                            body: JSON.stringify({ 'refreshToken': window.refreshToken })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('response').innerText = 'Response: ' + JSON.stringify(data);
-                        })
-                        .catch(error => console.error('Error:', error));
-                    } else {
-                        document.getElementById('response').innerText = 'No refresh token available.';
-                    }
-                }
-            </script>
-        </body>
-        </html>
-    '''
+############################### Get Token function ###############################
 
 @app.route('/get_refresh_token')
 def get_refresh_token():
@@ -83,6 +43,10 @@ def get_refresh_token():
             return jsonify({'error': 'No se encontró el refreshToken en la respuesta.'})
     else:
         return jsonify({'error': 'Error en la solicitud', 'status_code': response.status_code, 'response': response.text})
+
+
+############################### Refresh access token function ###############################
+
 
 @app.route('/refresh_access_token', methods=['POST'])
 def refresh_access_token():
