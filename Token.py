@@ -69,7 +69,8 @@ def get_refresh_token():
 
     data = {}
 
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+    # Parametro verify se setea en falso para evitar el uso de un certificado. No recomendado en ambiente productivo
+    response = requests.post(url, headers=headers, data=json.dumps(data), verify=False)
 
     if response.status_code == 200:
         response_json = response.json()
@@ -81,7 +82,7 @@ def get_refresh_token():
         else:
             return jsonify({'error': 'No se encontró el refreshToken en la respuesta.'})
     else:
-        return jsonify({'error': 'Error en la solicitud', 'status_code': response.status_code})
+        return jsonify({'error': 'Error en la solicitud', 'status_code': response.status_code, 'response': response.text})
 
 @app.route('/refresh_access_token', methods=['POST'])
 def refresh_access_token():
@@ -98,12 +99,13 @@ def refresh_access_token():
         "refreshToken": stored_refresh_token
     }
 
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+    # Parametro verify se setea en falso para evitar el uso de un certificado. No recomendado en ambiente productivo
+    response = requests.post(url, headers=headers, data=json.dumps(data), verify=False)
 
     if response.status_code == 200:
         return jsonify(response.json())
     else:
-        return jsonify({'error': 'Error en la solicitud de refresco', 'status_code': response.status_code})
+        return jsonify({'error': 'Error en la solicitud de refresco', 'status_code': response.status_code, 'response': response.text})
 
 if __name__ == '__main__':
     app.run(debug=True)
