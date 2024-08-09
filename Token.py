@@ -4,8 +4,9 @@ import json
 
 app = Flask(__name__)
 
-# Variable global para almacenar el refreshToken
+# Variables globales para almacenar tokens
 stored_refresh_token = None
+stored_access_token = None
 
 ############################### Execute index HTML page ###############################
 
@@ -29,7 +30,6 @@ def get_refresh_token():
 
     data = {}
 
-    # Parametro verify se setea en falso para evitar el uso de un certificado. No recomendado en ambiente productivo
     response = requests.post(url, headers=headers, data=json.dumps(data), verify=False)
 
     if response.status_code == 200:
@@ -44,9 +44,7 @@ def get_refresh_token():
     else:
         return jsonify({'error': 'Error en la solicitud', 'status_code': response.status_code, 'response': response.text})
 
-
 ############################### Refresh access token function ###############################
-
 
 @app.route('/refresh_access_token', methods=['POST'])
 def refresh_access_token():
@@ -63,13 +61,61 @@ def refresh_access_token():
         "refreshToken": stored_refresh_token
     }
 
-    # Parametro verify se setea en falso para evitar el uso de un certificado. No recomendado en ambiente productivo
     response = requests.post(url, headers=headers, data=json.dumps(data), verify=False)
+
+    if response.status_code == 200:
+        response_json = response.json()
+        access_token = response_json.get('accessToken')
+        global stored_access_token
+        stored_access_token = access_token
+        if access_token:
+            return jsonify({'accessToken': access_token})
+            
+        else:
+            return jsonify({'error': 'No se encontró el accessToken en la respuesta.'})
+    else:
+        return jsonify({'error': 'Error en la solicitud', 'status_code': response.status_code, 'response': response.text})
+
+
+############################### Info Account ###############################
+
+@app.route('/get_accounts')
+def get_accounts():
+    if stored_access_token is None:
+        return jsonify({'error': 'No access token available.'})
+
+    url = "https://clientapi_sandbox.portfoliopersonal.com/api/1.0/Account/Accounts"
+
+    headers = {
+        "AuthorizedClient": "API_CLI_REST",
+        "ClientKey": "ppApiCliSB",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + stored_access_token
+    }
+
+    response = requests.get(url, headers=headers, verify=False)
 
     if response.status_code == 200:
         return jsonify(response.json())
     else:
-        return jsonify({'error': 'Error en la solicitud de refresco', 'status_code': response.status_code, 'response': response.text})
+        return jsonify({'error': 'Error en la solicitud', 'status_code': response.status_code, 'response': response.text})
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+#Se almaceno la variable Access Token en stored_access_token
+
+#Se crea un nuevo boton en html: <button onclick="fetchAccounts()">Obtener Cuentas</button>
+
+#Se crea la referencia en JS:
+#  function fetchAccounts() {
+    #if (window.accessToken) {
+    #   fetch('/get_accounts')
+
+#Esto llama a py donde se colocaron los parametros de URL, Header, llamando a Autorizathion como stored_access_token
+
+#revise en la terminar del boton HTML que trae la info y tira:
+    #ReferenceError: fetchAccounts is not defined
+    #pero el boton lo veo bien vinculado a JS.
+    #Siento que es una boludes
+    
