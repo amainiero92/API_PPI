@@ -4,9 +4,30 @@ import json
 
 app = Flask(__name__)
 
+# Variables globales
+global authorizedClient
+global clientKey
+global apiKey
+global apiSecret
 # Variables globales para almacenar tokens
 stored_refresh_token = None
 stored_access_token = None
+
+# Cambiar a False y completar con credenciales para PROD
+SANDconnected = False
+
+if SANDconnected:
+    baseUrl = "https://clientapi_sandbox.portfoliopersonal.com/"
+    authorizedClient = "API_CLI_REST"
+    clientKey = "ppApiCliSB"
+    apiKey = "VHltelE1SG5EOGZrdndzdE5ZMU4="
+    apiSecret = "MjA3MDBhNzItNmMzOC00YzRhLWIyMzQtOGUwNGYyODY3ZWY0"
+else:
+    baseUrl = "https://clientapi.portfoliopersonal.com/"
+    authorizedClient = "API_CLI_REST"
+    clientKey = "pp19CliApp12"
+    apiKey = ""
+    apiSecret = ""
 
 ############################### Execute index HTML page ###############################
 
@@ -18,14 +39,14 @@ def index():
 
 @app.route('/get_refresh_token')
 def get_refresh_token():
-    url = "https://clientapi_sandbox.portfoliopersonal.com/api/1.0/Account/LoginApi"
+    url = baseUrl + "api/1.0/Account/LoginApi"
 
     headers = {
-        "AuthorizedClient": "API_CLI_REST",
-        "ClientKey": "ppApiCliSB",
+        "AuthorizedClient": authorizedClient,
+        "ClientKey": clientKey,
         "Content-Type": "application/json",
-        "ApiKey": "VHltelE1SG5EOGZrdndzdE5ZMU4=",
-        "ApiSecret": "MjA3MDBhNzItNmMzOC00YzRhLWIyMzQtOGUwNGYyODY3ZWY0"
+        "ApiKey": apiKey,
+        "ApiSecret": apiSecret
     }
 
     data = {}
@@ -48,11 +69,11 @@ def get_refresh_token():
 
 @app.route('/refresh_access_token', methods=['POST'])
 def refresh_access_token():
-    url = "https://clientapi_sandbox.portfoliopersonal.com/api/1.0/Account/RefreshToken"
+    url = baseUrl + "api/1.0/Account/RefreshToken"
 
     headers = {
-        "AuthorizedClient": "API_CLI_REST",
-        "ClientKey": "ppApiCliSB",
+        "AuthorizedClient": authorizedClient,
+        "ClientKey": clientKey,
         "Content-Type": "application/json",
         "Authorization": "Bearer " + stored_refresh_token
     }
@@ -84,11 +105,11 @@ def get_accounts():
     if stored_access_token is None:
         return jsonify({'error': 'No access token available.'})
 
-    url = "https://clientapi_sandbox.portfoliopersonal.com/api/1.0/Account/Accounts"
+    url = baseUrl + "api/1.0/Account/Accounts"
 
     headers = {
-        "AuthorizedClient": "API_CLI_REST",
-        "ClientKey": "ppApiCliSB",
+        "AuthorizedClient": authorizedClient,
+        "ClientKey": clientKey,
         "Content-Type": "application/json",
         "Authorization": "Bearer " + stored_access_token
     }
