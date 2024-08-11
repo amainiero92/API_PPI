@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, render_template, request
 import requests
 import json
+import string
+import secrets
 
 app = Flask(__name__)
 
@@ -9,19 +11,22 @@ global authorizedClient
 global clientKey
 global apiKey
 global apiSecret
+
 # Variables globales para almacenar tokens
 stored_refresh_token = None
 stored_access_token = None
+apiKey = ""
+apiSecret = ""
 
 # Cambiar a False y completar con credenciales para PROD
-SANDconnected = False
+SANDconnected = True
 
 if SANDconnected:
     baseUrl = "https://clientapi_sandbox.portfoliopersonal.com/"
     authorizedClient = "API_CLI_REST"
     clientKey = "ppApiCliSB"
-    apiKey = "VHltelE1SG5EOGZrdndzdE5ZMU4="
-    apiSecret = "MjA3MDBhNzItNmMzOC00YzRhLWIyMzQtOGUwNGYyODY3ZWY0"
+    apiKey = "" #VHltelE1SG5EOGZrdndzdE5ZMU4=
+    apiSecret = "" #MjA3MDBhNzItNmMzOC00YzRhLWIyMzQtOGUwNGYyODY3ZWY0
 else:
     baseUrl = "https://clientapi.portfoliopersonal.com/"
     authorizedClient = "API_CLI_REST"
@@ -34,6 +39,38 @@ else:
 @app.route('/')
 def index():
     return render_template('index.html')
+
+############################### Ingreso de claves publica y privada ###############################
+
+def generate_key(length=48):
+    """Genera una clave alfanumérica de una longitud especificada."""
+    alphabet = string.ascii_letters + string.digits
+    return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+@app.route('/generate', methods=['POST'])
+def generate():
+    public_key = generate_key()
+    private_key = generate_key()
+    return render_template('index.html', apiKey=public_key, apiSecret=private_key)
+
+############################### Set API Key and Secret ###############################
+
+@app.route('/set_api_key_and_secret', methods=['POST'])
+def set_api_key_and_secret():
+    global apiKey
+    global apiSecret
+    
+    public_key = request.form.get('public_key')
+    private_key = request.form.get('private_key')
+    
+    if public_key and private_key:
+        apiKey = public_key
+        apiSecret = private_key
+        return jsonify({'status': 'success', 'apiKey': apiKey})
+    else:
+        return jsonify({'status': 'error', 'message': 'No se recibieron las claves necesarias.'})
+   
+
 
 ############################### Get Token function ###############################
 

@@ -9,6 +9,19 @@
 </head>
 
 <body>
+
+    <h1>Ingresá tus credenciales</h1>
+    <form action="/generate" method="post">        
+        <label for="public_key">Clave Pública:</label>
+        <input type="text" id="public_key" name="public_key" value="{{ public_key }}" ><br><br>
+        <label for="private_key">Clave Privada:</label>
+        <input type="text" id="private_key" name="private_key" value="{{ private_key }}" ><br><br>
+        <button type="submit">Generar Claves</button>
+    </form>
+
+    <br> <!-- Línea en blanco -->
+    <br>
+
     <button onclick="fetchRefreshToken()">Obtener Refresh Token</button>
     <button onclick="refreshAccessToken()">Actualizar Acceso</button>
     <button onclick="fetchAccounts()">Obtener Cuentas</button>
@@ -18,4 +31,3 @@
 
 </html>
 
-print()

@@ -53,3 +53,28 @@ function fetchAccounts() {
         document.getElementById('response').innerText = 'No access token available.';
     }
 }
+
+function setApiKeyAndSecret() {
+    var publicKey = document.getElementById('public_key').value;
+    var privateKey = document.getElementById('private_key').value;
+
+    fetch('/set_api_key_and_secret', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            'public_key': publicKey,
+            'private_key': privateKey
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            document.getElementById('response').innerText = 'Claves almacenadas con éxito: ' + data.apiKey;
+        } else {
+            document.getElementById('response').innerText = 'Error: ' + data.message;
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
