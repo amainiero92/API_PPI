@@ -1,10 +1,22 @@
-function fetchRefreshToken() {
-    fetch('/get_refresh_token')
-        .then(response => response.json())
-        .then(data => {
+function logIn() {
+    fetch('/LoginApi', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+            { 
+                'public_key': document.getElementById("public_key").value,
+                'private_key': document.getElementById("private_key").value,
+                'ambiente_sand': document.getElementById("ambiente_sand").value,
+            })
+    })
+        .then(response => response.json()) // Convierte la respuesta a JSON
+        .then(data => { // Utiliza los datos JSON
             if (data.refreshToken) {
                 document.getElementById('response').innerText = 'Refresh Token: ' + data.refreshToken;
                 window.refreshToken = data.refreshToken;
+                refreshAccessToken();
             } else {
                 document.getElementById('response').innerText = 'Error: ' + data.error;
             }
@@ -35,46 +47,4 @@ function refreshAccessToken() {
     } else {
         document.getElementById('response').innerText = 'No refresh token available.';
     }
-}
-
-function fetchAccounts() {
-    if (window.accessToken) {
-        fetch('/get_accounts')
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    document.getElementById('response').innerText = 'Error: ' + data.error;
-                } else {
-                    document.getElementById('response').innerText = 'Accounts: ' + JSON.stringify(data, null, 2);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    } else {
-        document.getElementById('response').innerText = 'No access token available.';
-    }
-}
-
-function setApiKeyAndSecret() {
-    var publicKey = document.getElementById('public_key').value;
-    var privateKey = document.getElementById('private_key').value;
-
-    fetch('/set_api_key_and_secret', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-            'public_key': publicKey,
-            'private_key': privateKey
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            document.getElementById('response').innerText = 'Claves almacenadas con éxito: ' + data.apiKey;
-        } else {
-            document.getElementById('response').innerText = 'Error: ' + data.message;
-        }
-    })
-    .catch(error => console.error('Error:', error));
 }

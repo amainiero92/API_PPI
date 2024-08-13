@@ -25,65 +25,33 @@ if SANDconnected:
     baseUrl = "https://clientapi_sandbox.portfoliopersonal.com/"
     authorizedClient = "API_CLI_REST"
     clientKey = "ppApiCliSB"
-    apiKey = "" #VHltelE1SG5EOGZrdndzdE5ZMU4=
-    apiSecret = "" #MjA3MDBhNzItNmMzOC00YzRhLWIyMzQtOGUwNGYyODY3ZWY0
 else:
     baseUrl = "https://clientapi.portfoliopersonal.com/"
     authorizedClient = "API_CLI_REST"
     clientKey = "pp19CliApp12"
-    apiKey = ""
-    apiSecret = ""
 
 ############################### Execute index HTML page ###############################
 
 @app.route('/')
 def index():
     return render_template('index.html')
-
-############################### Ingreso de claves publica y privada ###############################
-
-def generate_key(length=48):
-    """Genera una clave alfanumérica de una longitud especificada."""
-    alphabet = string.ascii_letters + string.digits
-    return ''.join(secrets.choice(alphabet) for _ in range(length))
-
-@app.route('/generate', methods=['POST'])
-def generate():
-    public_key = generate_key()
-    private_key = generate_key()
-    return render_template('index.html', apiKey=public_key, apiSecret=private_key)
-
-############################### Set API Key and Secret ###############################
-
-@app.route('/set_api_key_and_secret', methods=['POST'])
-def set_api_key_and_secret():
-    global apiKey
-    global apiSecret
     
-    public_key = request.form.get('public_key')
-    private_key = request.form.get('private_key')
-    
-    if public_key and private_key:
-        apiKey = public_key
-        apiSecret = private_key
-        return jsonify({'status': 'success', 'apiKey': apiKey})
-    else:
-        return jsonify({'status': 'error', 'message': 'No se recibieron las claves necesarias.'})
-   
+############################### Log in function ###############################
 
-
-############################### Get Token function ###############################
-
-@app.route('/get_refresh_token')
-def get_refresh_token():
+@app.route('/LoginApi', methods=['POST'])
+def get_login():
+    publicKey = request.json.get('public_key')
+    privateKey = request.json.get('private_key')
     url = baseUrl + "api/1.0/Account/LoginApi"
 
+    app.logger.info(publicKey)
+    app.logger.info(privateKey)
     headers = {
         "AuthorizedClient": authorizedClient,
         "ClientKey": clientKey,
         "Content-Type": "application/json",
-        "ApiKey": apiKey,
-        "ApiSecret": apiSecret
+        "ApiKey": publicKey,
+        "ApiSecret": privateKey
     }
 
     data = {}
@@ -160,20 +128,3 @@ def get_accounts():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-#Se almaceno la variable Access Token en stored_access_token
-
-#Se crea un nuevo boton en html: <button onclick="fetchAccounts()">Obtener Cuentas</button>
-
-#Se crea la referencia en JS:
-#  function fetchAccounts() {
-    #if (window.accessToken) {
-    #   fetch('/get_accounts')
-
-#Esto llama a py donde se colocaron los parametros de URL, Header, llamando a Autorizathion como stored_access_token
-
-#revise en la terminar del boton HTML que trae la info y tira:
-    #ReferenceError: fetchAccounts is not defined
-    #pero el boton lo veo bien vinculado a JS.
-    #Siento que es una boludes
-    

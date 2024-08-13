@@ -5,19 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejecutar Código Python</title>
+    <!-- Los archivos JS tienen que estar en la siguiente ruta al utilizarse Flask -->
     <script src="{{ url_for('static', filename='token.js') }}" defer></script>
 </head>
 
 <body>
 
     <h1>Ingresá tus credenciales</h1>
-    <form action="/generate" method="post">        
-        <label for="public_key">Clave Pública:</label>
-        <input type="text" id="public_key" name="public_key" value="{{ public_key }}" ><br><br>
-        <label for="private_key">Clave Privada:</label>
-        <input type="text" id="private_key" name="private_key" value="{{ private_key }}" ><br><br>
-        <button type="submit">Generar Claves</button>
+    <form action="/get_login" method="post"></form>
+    <label for="public_key">Clave Pública:</label>
+    <input type="text" id="public_key" name="public_key" ><br><br>
+    <label for="private_key">Clave Privada:</label>
+    <input type="text" id="private_key" name="private_key"><br><br>
     </form>
+
+    <label for="ambiente_sand">Ambiente SAND</label>
+    <input type="checkbox" id="ambiente_sand" name="ambiente_sand"><br><br>
+    <button onclick="logIn()">Log in</button>
 
     <br> <!-- Línea en blanco -->
     <br>
@@ -30,4 +34,3 @@
 </body>
 
 </html>
-
