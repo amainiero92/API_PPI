@@ -8,17 +8,17 @@ function logIn() {
             { 
                 'public_key': document.getElementById("public_key").value,
                 'private_key': document.getElementById("private_key").value,
-                'ambiente_sand': document.getElementById("ambiente_sand").value,
+                'ambiente_sand': document.getElementById("ambiente_sand").checked,
             })
     })
         .then(response => response.json()) // Convierte la respuesta a JSON
         .then(data => { // Utiliza los datos JSON
             if (data.refreshToken) {
-                document.getElementById('response').innerText = 'Refresh Token: ' + data.refreshToken;
+                document.getElementById('logInTokenResponse').innerText = 'Refresh Token: ' + data.refreshToken;
                 window.refreshToken = data.refreshToken;
                 refreshAccessToken();
             } else {
-                document.getElementById('response').innerText = 'Error: ' + data.error;
+                document.getElementById('logInTokenResponse').innerText = 'Error: ' + data.error;
             }
         })
         .catch(error => console.error('Error:', error));
@@ -32,19 +32,51 @@ function refreshAccessToken() {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + window.refreshToken
             },
-            body: JSON.stringify({ 'refreshToken': window.refreshToken })
+            body: JSON.stringify(
+                { 
+                  'refreshToken': window.refreshToken,
+                  'ambiente_sand': document.getElementById("ambiente_sand").checked,  
+                })
         })
             .then(response => response.json())
             .then(data => {
                 if (data.accessToken) {
                     window.accessToken = data.accessToken;
-                    document.getElementById('response').innerText = 'Access Token: ' + data.accessToken;
+                    document.getElementById('refreshAccessTokenResponse').innerText = 'Access Token: ' + data.accessToken;
                 } else {
-                    document.getElementById('response').innerText = 'Error: ' + data.error;
+                    document.getElementById('refreshAccessTokenResponse').innerText = 'Error: ' + data.error;
                 }
             })
             .catch(error => console.error('Error:', error));
     } else {
-        document.getElementById('response').innerText = 'No refresh token available.';
+        document.getElementById('refreshAccessTokenResponse').innerText = 'No refresh token available.';
+    }
+}
+
+function fetchAccounts() {
+    if (window.accessToken) {
+        fetch('/get_accounts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + window.refreshToken
+            },
+            body: JSON.stringify(
+                { 
+                  'refreshToken': window.refreshToken,
+                  'ambiente_sand': document.getElementById("ambiente_sand").checked,  
+                })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('accounts').innerText = 'Error: ' + data.error;
+                } else {
+                    document.getElementById('accounts').innerText = 'Accounts: ' + JSON.stringify(data, null, 2);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    } else {
+        document.getElementById('accounts').innerText = 'No access token available.';
     }
 }

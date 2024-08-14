@@ -18,17 +18,34 @@ stored_access_token = None
 apiKey = ""
 apiSecret = ""
 
-# Cambiar a False y completar con credenciales para PROD
-SANDconnected = True
+# Objeto con credenciales para conexión SAND o PROD
+ppiCredentials = {
+    "SAND": {
+        "baseUrl": "https://clientapi_sandbox.portfoliopersonal.com/",
+        "authorizedClient": "API_CLI_REST",
+        "clientKey": "ppApiCliSB"
+    },
+    "PROD": {
+        "baseUrl": "https://clientapi.portfoliopersonal.com/",
+        "authorizedClient": "API_CLI_REST",
+        "clientKey": "pp19CliApp12"
+    }
+}
 
-if SANDconnected:
-    baseUrl = "https://clientapi_sandbox.portfoliopersonal.com/"
-    authorizedClient = "API_CLI_REST"
-    clientKey = "ppApiCliSB"
-else:
-    baseUrl = "https://clientapi.portfoliopersonal.com/"
-    authorizedClient = "API_CLI_REST"
-    clientKey = "pp19CliApp12"
+############################### Funciones Locales ###############################
+#### Definir en esta ubicación todas las funciones que utilizarán localmente ####
+#################################################################################
+
+def getCredentials(sandEnvironment, method):
+    # Base URL con metodo a utilizar
+    baseUrl = ppiCredentials["SAND"]["baseUrl"] if sandEnvironment else ppiCredentials["PROD"]["baseUrl"]
+    # Credenciales ppi segun ambiente seleccionado
+    credentials = {
+        "authorizedClient": ppiCredentials["SAND"]["authorizedClient"] if sandEnvironment else ppiCredentials["PROD"]["authorizedClient"],
+        "clientKey": ppiCredentials["SAND"]["clientKey"] if sandEnvironment else ppiCredentials["PROD"]["clientKey"],        
+        "url" : baseUrl + method
+    }
+    return credentials 
 
 ############################### Execute index HTML page ###############################
 
@@ -40,15 +57,21 @@ def index():
 
 @app.route('/LoginApi', methods=['POST'])
 def get_login():
+    # Se cargan variables en base a campos en HTML
     publicKey = request.json.get('public_key')
     privateKey = request.json.get('private_key')
-    url = baseUrl + "api/1.0/Account/LoginApi"
-
+    isSandEnvironment = request.json.get('ambiente_sand')
     app.logger.info(publicKey)
     app.logger.info(privateKey)
+    app.logger.info(isSandEnvironment)
+    credentials = getCredentials(request.json.get('ambiente_sand'), "api/1.0/Account/LoginApi")
+    
+    app.logger.info(credentials["authorizedClient"])
+    app.logger.info(credentials["clientKey"])
+    app.logger.info(credentials["url"])
     headers = {
-        "AuthorizedClient": authorizedClient,
-        "ClientKey": clientKey,
+        "AuthorizedClient": credentials["authorizedClient"],
+        "ClientKey": credentials["clientKey"],
         "Content-Type": "application/json",
         "ApiKey": publicKey,
         "ApiSecret": privateKey
@@ -56,7 +79,7 @@ def get_login():
 
     data = {}
 
-    response = requests.post(url, headers=headers, data=json.dumps(data), verify=False)
+    response = requests.post(credentials["url"], headers=headers, data=json.dumps(data), verify=False)
 
     if response.status_code == 200:
         response_json = response.json()
@@ -74,11 +97,13 @@ def get_login():
 
 @app.route('/refresh_access_token', methods=['POST'])
 def refresh_access_token():
-    url = baseUrl + "api/1.0/Account/RefreshToken"
+    isSandEnvironment = request.json.get('ambiente_sand')
+    app.logger.info(isSandEnvironment)
+    credentials = getCredentials(request.json.get('ambiente_sand'), "api/1.0/Account/RefreshToken")
 
     headers = {
-        "AuthorizedClient": authorizedClient,
-        "ClientKey": clientKey,
+        "AuthorizedClient": credentials["authorizedClient"],
+        "ClientKey": credentials["clientKey"],
         "Content-Type": "application/json",
         "Authorization": "Bearer " + stored_refresh_token
     }
@@ -87,7 +112,11 @@ def refresh_access_token():
         "refreshToken": stored_refresh_token
     }
 
-    response = requests.post(url, headers=headers, data=json.dumps(data), verify=False)
+    app.logger.info(credentials["authorizedClient"])
+    app.logger.info(credentials["clientKey"])
+    app.logger.info(credentials["url"])
+
+    response = requests.post(credentials["url"], headers=headers, data=json.dumps(data), verify=False)
 
     if response.status_code == 200:
         response_json = response.json()
@@ -105,21 +134,24 @@ def refresh_access_token():
 
 ############################### Info Account ###############################
 
-@app.route('/get_accounts')
+@app.route('/get_accounts', methods=['POST'])
 def get_accounts():
-    if stored_access_token is None:
-        return jsonify({'error': 'No access token available.'})
+    isSandEnvironment = request.json.get('ambiente_sand')
+    app.logger.info(isSandEnvironment)
+    credentials = getCredentials(request.json.get('ambiente_sand'), "api/1.0/Account/Accounts")
 
-    url = baseUrl + "api/1.0/Account/Accounts"
+    app.logger.info(credentials["authorizedClient"])
+    app.logger.info(credentials["clientKey"])
+    app.logger.info(credentials["url"])
 
     headers = {
-        "AuthorizedClient": authorizedClient,
-        "ClientKey": clientKey,
+        "AuthorizedClient": credentials["authorizedClient"],
+        "ClientKey": credentials["clientKey"],
         "Content-Type": "application/json",
         "Authorization": "Bearer " + stored_access_token
     }
 
-    response = requests.get(url, headers=headers, verify=False)
+    response = requests.get(credentials["url"], headers=headers, verify=False)
 
     if response.status_code == 200:
         return jsonify(response.json())
