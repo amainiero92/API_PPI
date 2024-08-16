@@ -78,7 +78,7 @@ function fetchAccounts()
         .then(data => 
         {       
             accounts.innerHTML = ''; // Se limpia los valores del campo lista antes de comenzar
-            accounts.innerHTML = '<option value="">Seleccione una opción</option>';
+            accounts.innerHTML = '<option value="">Seleccione una cuenta</option>';
             if (data.error) 
             {
                 accountsErrormessage.innerText = data.error; // Se coloca el mensaje de error obtenido
