@@ -157,6 +157,38 @@ def get_accounts():
         return jsonify(response.json())
     else:
         return jsonify({'error': 'Error en la solicitud', 'status_code': response.status_code, 'response': response.text})
+    
+    ############################### Info Movements ###############################
+
+@app.route('/get_account_movements', methods=['POST'])
+def get_account_movements():
+    isSandEnvironment = request.json.get('ambiente_sand')
+    accountNumber = request.json.get('accounts')
+    app.logger.info(isSandEnvironment)
+    datefrom = request.json.get('date_from')
+    dateTo = request.json.get('date_to')
+    ticker = request.json.get('ticker')
+    getMovementsUrl = "api/1.0/Account/Movements?accountNumber="+accountNumber+"&dateFrom="+datefrom+"&dateTo="+dateTo+"&ticker="+ticker    
+    app.logger.info(getMovementsUrl)
+    credentials = getCredentials(request.json.get('ambiente_sand'), getMovementsUrl)
+
+    app.logger.info(credentials["authorizedClient"])
+    app.logger.info(credentials["clientKey"])
+    app.logger.info(credentials["url"])
+
+    headers = {
+        "AuthorizedClient": credentials["authorizedClient"],
+        "ClientKey": credentials["clientKey"],
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + stored_access_token
+    }
+
+    response = requests.get(credentials["url"], headers=headers, verify=False)
+
+    if response.status_code == 200:
+        return jsonify(response.json())
+    else:
+        return jsonify({'error': 'Error en la solicitud', 'status_code': response.status_code, 'response': response.text})
 
 if __name__ == '__main__':
     app.run(debug=True)

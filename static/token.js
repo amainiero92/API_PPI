@@ -71,7 +71,7 @@ function fetchAccounts()
             body: JSON.stringify(
                 { 
                   'refreshToken': window.refreshToken,
-                  'ambiente_sand': document.getElementById("ambiente_sand").checked,  
+                  'ambiente_sand': document.getElementById("ambiente_sand").checked,
                 })
         })
         .then(response => response.json())
@@ -101,40 +101,62 @@ function fetchAccounts()
     }
 }
 
-function getAccountMovements() {
-    // Llamada a la API para buscar movimientos
-    // Reemplaza con la lógica para llamar a la API
-    const movimientos = [
-        {
-            agreementDate: '2024-08-01',
-            settlementDate: '2024-08-02',
-            moneda: 'USD',
-            amount: 1000.00,
-            price: 100.50,
-            description: 'Compra de acciones',
-            ticker: 'AAPL',
-            quantity: 10,
-            balance: 1000.00
-        },
-        // Más movimientos...
-    ];
-
+function getAccountMovements() 
+{
+    const movementsErrormessage = document.getElementById('movementsErrormessage');
     const tbody = document.querySelector('#movimientos tbody');
     tbody.innerHTML = ''; // Limpiar tabla
 
-    movimientos.forEach(mov => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${mov.agreementDate}</td>
-            <td>${mov.settlementDate}</td>
-            <td>${mov.moneda}</td>
-            <td>${mov.amount.toFixed(2)}</td>
-            <td>${mov.price.toFixed(2)}</td>
-            <td>${mov.description}</td>
-            <td>${mov.ticker}</td>
-            <td>${mov.quantity.toFixed(2)}</td>
-            <td>${mov.balance.toFixed(2)}</td>
-        `;
-        tbody.appendChild(row);
-    });
+    if (window.accessToken) 
+    {
+        fetch('/get_account_movements', 
+        {
+            method: 'POST',
+            headers: 
+            {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + window.refreshToken
+            },
+            body: JSON.stringify(
+                { 
+                  'refreshToken': window.refreshToken,
+                  'ambiente_sand': document.getElementById("ambiente_sand").checked,
+                  'accounts': document.getElementById("accounts").value,
+                  'date_from': document.getElementById("date_from").value,
+                  'date_to': document.getElementById("date_to").value,
+                  'ticker': document.getElementById("ticker").value,
+                })
+        })
+        .then(response => response.json())
+        .then(data => 
+        {       
+            if (data.error) 
+            {
+                movementsErrormessage.innerText = data.error; // Se coloca el mensaje de error obtenido
+            } 
+            else 
+            {
+                data.forEach(mov => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${mov.agreementDate}</td>
+                        <td>${mov.settlementDate}</td>
+                        <td>${mov.moneda}</td>
+                        <td>${mov.amount.toFixed(2)}</td>
+                        <td>${mov.price.toFixed(2)}</td>
+                        <td>${mov.description}</td>
+                        <td>${mov.ticker}</td>
+                        <td>${mov.quantity.toFixed(2)}</td>
+                        <td>${mov.balance.toFixed(2)}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    } 
+    else 
+    {
+        movementsErrormessage.innerText = 'No access token available.';
+    }
 }

@@ -63,8 +63,12 @@
 
     <br><br>
 
-    <!-- Botón para buscar movimientos -->
-    <button type="button" onclick="getAccountMovements()">Buscar Movimientos</button>
+    <div style="display: flex; gap: 20px; align-items: center;">
+        <!-- Botón para buscar movimientos -->
+        <button type="button" onclick="getAccountMovements()">Buscar Movimientos</button>
+        <!-- Campo para mostrar mensaje de error obtenido al buscar movimientos -->
+        <pre id="movementsErrormessage" style="color: red; margin: 0;"></pre>
+    </div>
 
     <br><br>
 
