@@ -12,16 +12,18 @@
 <body>
 
     <h1>Ingresá tus credenciales</h1>
-    <form action="/get_login" method="post"></form>
-    <label for="public_key">Clave Pública:</label>
-    <input type="text" id="public_key" name="public_key" ><br><br>
-    <label for="private_key">Clave Privada:</label>
-    <input type="text" id="private_key" name="private_key"><br><br>
-    </form>
+    <!-- <form action="/get_login" method="post"> -->
+        <label for="public_key">Clave Pública:</label>
+        <input type="text" id="public_key" name="public_key" ><br><br>
 
-    <label for="ambiente_sand">Ambiente SAND</label>
-    <input type="checkbox" id="ambiente_sand" name="ambiente_sand"><br><br>
-    <button onclick="logIn()">Log in</button>
+        <label for="private_key">Clave Privada:</label>
+        <input type="text" id="private_key" name="private_key"><br><br>
+
+        <label for="ambiente_sand">Ambiente SAND</label>
+        <input type="checkbox" id="ambiente_sand" name="ambiente_sand"><br><br>
+
+        <button type="button" onclick="logIn()">Log in</button>
+    <!-- </form> -->
 
     <br> <!-- Línea en blanco -->
     <br>
@@ -32,12 +34,62 @@
     <br> <!-- Línea en blanco -->
     <br>
 
-    <button onclick="fetchAccounts()">Obtener Cuentas</button>
-    
-    <br> <!-- Línea en blanco -->
-    <br>
+    <!-- Botón para obtener las cuentas -->
+    <button type="button" onclick="fetchAccounts()">Obtener Cuentas</button>
+    <!-- Campo para mostrar mensaje de error obtenido al buscar cuentas -->
+    <pre id="accountsErrormessage"></pre>
 
-    <pre id="accounts"></pre>
+
+    <!-- Campo de lista para las cuentas -->
+    <br><br>
+    <select id="accounts">
+        <option value="">Seleccione una cuenta</option>
+    </select>
+
+    <br><br>
+
+    <!-- Campos DateFrom, DateTo, Ticker -->
+    <div style="display: flex; gap: 20px;">
+        <div>
+            <label for="date_from">DateFrom:</label>
+            <input type="date" id="date_from" name="date_from">
+        </div>
+        <div>
+            <label for="date_to">DateTo:</label>
+            <input type="date" id="date_to" name="date_to">
+        </div>
+        <div>
+            <label for="ticker">Ticker:</label>
+            <input type="text" id="ticker" name="ticker">
+        </div>
+    </div>
+
+    <br><br>
+
+    <!-- Botón para buscar movimientos -->
+    <button type="button" onclick="getAccountMovements()">Buscar Movimientos</button>
+
+    <br><br>
+
+    <!-- Tabla para mostrar los movimientos -->
+    <table id="movimientos" border="1">
+        <thead>
+            <tr>
+                <th>AgreementDate</th>
+                <th>SettlementDate</th>
+                <th>Moneda</th>
+                <th>Amount</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Ticker</th>
+                <th>Quantity</th>
+                <th>Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se insertarán las filas de datos -->
+        </tbody>
+    </table>
 </body>
 
 </html>

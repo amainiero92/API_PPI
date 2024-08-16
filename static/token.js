@@ -53,11 +53,18 @@ function refreshAccessToken() {
     }
 }
 
-function fetchAccounts() {
-    if (window.accessToken) {
-        fetch('/get_accounts', {
+function fetchAccounts() 
+{
+    const accounts = document.getElementById('accounts');
+    const accountsErrormessage = document.getElementById('accountsErrormessage');
+
+    if (window.accessToken) 
+    {
+        fetch('/get_accounts', 
+        {
             method: 'POST',
-            headers: {
+            headers: 
+            {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + window.refreshToken
             },
@@ -67,16 +74,67 @@ function fetchAccounts() {
                   'ambiente_sand': document.getElementById("ambiente_sand").checked,  
                 })
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    document.getElementById('accounts').innerText = 'Error: ' + data.error;
-                } else {
-                    document.getElementById('accounts').innerText = 'Accounts: ' + JSON.stringify(data, null, 2);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    } else {
-        document.getElementById('accounts').innerText = 'No access token available.';
+        .then(response => response.json())
+        .then(data => 
+        {       
+            accounts.innerHTML = ''; // Se limpia los valores del campo lista antes de comenzar
+            accounts.innerHTML = '<option value="">Seleccione una opción</option>';
+            if (data.error) 
+            {
+                accountsErrormessage.innerText = data.error; // Se coloca el mensaje de error obtenido
+            } 
+            else 
+            {
+                data.forEach(result => {
+                    const newAccount = document.createElement('option');
+                    newAccount.value = result.accountNumber;
+                    newAccount.textContent = result.name;
+                    accounts.appendChild(newAccount);
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    } 
+    else 
+    {
+        accountsErrormessage.innerText = 'No access token available.';
     }
+}
+
+function getAccountMovements() {
+    // Llamada a la API para buscar movimientos
+    // Reemplaza con la lógica para llamar a la API
+    const movimientos = [
+        {
+            agreementDate: '2024-08-01',
+            settlementDate: '2024-08-02',
+            moneda: 'USD',
+            amount: 1000.00,
+            price: 100.50,
+            description: 'Compra de acciones',
+            ticker: 'AAPL',
+            quantity: 10,
+            balance: 1000.00
+        },
+        // Más movimientos...
+    ];
+
+    const tbody = document.querySelector('#movimientos tbody');
+    tbody.innerHTML = ''; // Limpiar tabla
+
+    movimientos.forEach(mov => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${mov.agreementDate}</td>
+            <td>${mov.settlementDate}</td>
+            <td>${mov.moneda}</td>
+            <td>${mov.amount.toFixed(2)}</td>
+            <td>${mov.price.toFixed(2)}</td>
+            <td>${mov.description}</td>
+            <td>${mov.ticker}</td>
+            <td>${mov.quantity.toFixed(2)}</td>
+            <td>${mov.balance.toFixed(2)}</td>
+        `;
+        tbody.appendChild(row);
+    });
 }
