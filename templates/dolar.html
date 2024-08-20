@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dólar Blue Histórico</title>
+</head>
+<body>
+    <h1>Consulta el valor del Dólar Blue - Fin de mes compra</h1>
+    <form method="post">
+        <label for="mes">Mes (por ejemplo, 19-enero-2024):</label>
+        <input type="text" id="mes" name="mes" required>
+        <button type="submit">Consultar</button>
+    </form>
+
+    {% if valor %}
+        <h2>Valor Fin de Mes Compra en {{ request.form['mes'] }}: {{ valor }}</h2>
+    {% endif %}
+</body>
+</html>
