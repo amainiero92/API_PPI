@@ -7,16 +7,45 @@
     <title>Ejecutar Código Python</title>
     <!-- Los archivos JS tienen que estar en la siguiente ruta al utilizarse Flask -->
     <script src="{{ url_for('static', filename='token.js') }}" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .password-container {
+            position: relative;
+            display: inline-block;
+        }
+        .password-container input {
+            padding-right: 30px; /* Espacio para el ícono del ojo */
+        }
+        .password-container .toggle-visibility {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px; /* Tamaño del ícono */
+            color: #555;
+        }
+        input[type="date"] {
+            padding: 5px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 
 <body>
 
     <h1>Ingresá tus credenciales</h1>
     <label for="public_key">Clave Pública:</label>
-    <input type="text" id="public_key" name="public_key" ><br><br>
+    <input type="text" id="public_key" name="public_key"><br><br>
 
     <label for="private_key">Clave Privada:</label>
-    <input type="text" id="private_key" name="private_key"><br><br>
+    <div class="password-container">
+        <input type="password" id="private_key" name="private_key">
+        <span class="toggle-visibility" onclick="togglePasswordVisibility()">
+            <i class="fas fa-eye" id="eye-open"></i> <!-- Ojo abierto -->
+            <i class="fas fa-eye-slash" id="eye-closed" style="display: none;"></i> <!-- Ojo cerrado -->
+        </span>
+    </div><br><br>
 
     <label for="ambiente_sand">Ambiente SAND</label>
     <input type="checkbox" id="ambiente_sand" name="ambiente_sand"><br><br>
@@ -91,6 +120,25 @@
             <!-- Aquí se insertarán las filas de datos -->
         </tbody>
     </table>
+
+    <script>
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById('private_key');
+            var eyeOpen = document.getElementById('eye-open');
+            var eyeClosed = document.getElementById('eye-closed');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeOpen.style.display = 'none';
+                eyeClosed.style.display = 'inline';
+            } else {
+                passwordInput.type = 'password';
+                eyeOpen.style.display = 'inline';
+                eyeClosed.style.display = 'none';
+            }
+        }
+    </script>
+
 </body>
 
 </html>
