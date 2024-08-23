@@ -1,0 +1,163 @@
+/* Estilo General del Body:
+Mejora el espaciado, la tipografía y el aspecto general de la página. */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+h1 {
+    color: #444;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Estilo para Formularios y Etiquetas:
+Asegura un buen alineado de los campos del formulario. */
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Estilo para el Botón de Login:
+Mejora la apariencia del botón para que sea más destacado. */
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Estilo para los Contenedores de Password:
+Mejor alineación y aspecto del campo de contraseña. */
+
+.password-container {
+    position: relative;
+    display: inline-flex;
+    width: 100%;
+}
+
+.password-container input {
+    flex: 1;
+    padding-right: 40px; /* Espacio para el ícono del ojo */
+}
+
+.password-container .toggle-visibility {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #888;
+}
+
+.password-container .toggle-visibility:hover {
+    color: #333;
+}
+
+/* Estilo para la Tabla de Movimientos:
+Mejora la apariencia de la tabla para hacerla más legible y atractiva. */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f2f2f2;
+    color: #555;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Estilo para Mensajes de Error:
+Estilo para los mensajes de error que se muestran al buscar cuentas o movimientos. */
+
+pre {
+    background-color: #ffe5e5;
+    padding: 10px;
+    border: 1px solid #ffcccc;
+    border-radius: 4px;
+    color: #d9534f;
+    margin-top: 10px;
+}
+
+/* Estilo para el Contenedor de Botones y Campos:
+Mejor alineación y espaciado de los botones y otros campos de formulario. */
+
+.flex-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.flex-container div {
+    flex: 1;
+}
+
+button[type="button"] {
+    flex-shrink: 0;
+}
+
+/* Estilo de Responsividad:
+Asegura que el formulario se vea bien en dispositivos móviles. */
+
+@media (max-width: 768px) {
+    .flex-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .password-container {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

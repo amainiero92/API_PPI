@@ -7,37 +7,21 @@
     <title>Ejecutar Código Python</title>
     <!-- Los archivos JS tienen que estar en la siguiente ruta al utilizarse Flask -->
     <script src="{{ url_for('static', filename='token.js') }}" defer></script>
+    <!-- Los archivos CSS tienen que estar en la siguiente ruta al utilizarse Flask -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <!-- Inclusiones CSS adicionales -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        .password-container {
-            position: relative;
-            display: inline-block;
-        }
-        .password-container input {
-            padding-right: 30px; /* Espacio para el ícono del ojo */
-        }
-        .password-container .toggle-visibility {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 18px; /* Tamaño del ícono */
-            color: #555;
-        }
-        input[type="date"] {
-            padding: 5px;
-            font-size: 16px;
-        }
-    </style>
 </head>
 
 <body>
 
     <h1>Ingresá tus credenciales</h1>
+
+    <!-- Clave Pública -->
     <label for="public_key">Clave Pública:</label>
     <input type="text" id="public_key" name="public_key"><br><br>
 
+    <!-- Clave Privada con contenedor para mostrar/ocultar contraseña -->
     <label for="private_key">Clave Privada:</label>
     <div class="password-container">
         <input type="password" id="private_key" name="private_key">
@@ -45,23 +29,31 @@
             <i class="fas fa-eye" id="eye-open"></i> <!-- Ojo abierto -->
             <i class="fas fa-eye-slash" id="eye-closed" style="display: none;"></i> <!-- Ojo cerrado -->
         </span>
-    </div><br><br>
+    </div>
 
-    <label for="ambiente_sand">Ambiente SAND</label>
-    <input type="checkbox" id="ambiente_sand" name="ambiente_sand"><br><br>
+    <br><br>
 
+    <!-- Checkbox para Ambiente SAND -->
+    <label for="ambiente_sand">
+        <input type="checkbox" id="ambiente_sand" name="ambiente_sand">
+        Ambiente SAND
+    </label>
+
+    <br><br>
+
+    <!-- Botón de Login -->
     <button type="button" onclick="logIn()">Log in</button>
 
-    <br> <!-- Línea en blanco -->
-    <br>
+    <br><br>
 
+    <!-- Respuesta del Token de LogIn -->
     <pre id="logInTokenResponse"></pre>
     <pre id="refreshAccessTokenResponse"></pre>
 
-    <br> <!-- Línea en blanco -->
-    <br>
+    <br><br>
 
-    <div style="display: flex; gap: 20px; align-items: center;">
+    <!-- Contenedor Flex para botones y campos -->
+    <div class="flex-container">
         <!-- Botón para obtener las cuentas -->
         <button type="button" onclick="fetchAccounts()">Obtener Cuentas</button>
         <!-- Campo de lista para las cuentas -->
@@ -74,8 +66,8 @@
 
     <br><br>
 
-    <!-- Campos DateFrom, DateTo, Ticker -->
-    <div style="display: flex; gap: 20px;">
+    <!-- Contenedor Flex para los campos de fecha y ticker -->
+    <div class="flex-container">
         <div>
             <label for="date_from">DateFrom:</label>
             <input type="date" id="date_from" name="date_from">
@@ -92,7 +84,8 @@
 
     <br><br>
 
-    <div style="display: flex; gap: 20px; align-items: center;">
+    <!-- Contenedor Flex para el botón de buscar movimientos -->
+    <div class="flex-container">
         <!-- Botón para buscar movimientos -->
         <button type="button" onclick="getAccountMovements()">Buscar Movimientos</button>
         <!-- Campo para mostrar mensaje de error obtenido al buscar movimientos -->
@@ -120,24 +113,6 @@
             <!-- Aquí se insertarán las filas de datos -->
         </tbody>
     </table>
-
-    <script>
-        function togglePasswordVisibility() {
-            var passwordInput = document.getElementById('private_key');
-            var eyeOpen = document.getElementById('eye-open');
-            var eyeClosed = document.getElementById('eye-closed');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeOpen.style.display = 'none';
-                eyeClosed.style.display = 'inline';
-            } else {
-                passwordInput.type = 'password';
-                eyeOpen.style.display = 'inline';
-                eyeClosed.style.display = 'none';
-            }
-        }
-    </script>
 
 </body>
 
