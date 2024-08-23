@@ -19,38 +19,41 @@
 
     <!-- Clave Pública -->
     <label for="public_key">Clave Pública:</label>
-    <input type="text" id="public_key" name="public_key"><br><br>
+    <div class="password-container">
+        <input type="text" id="public_key" name="public_key">
+    </div>
 
     <!-- Clave Privada con contenedor para mostrar/ocultar contraseña -->
     <label for="private_key">Clave Privada:</label>
     <div class="password-container">
         <input type="password" id="private_key" name="private_key">
-        <span class="toggle-visibility" onclick="togglePasswordVisibility()">
-            <i class="fas fa-eye" id="eye-open"></i> <!-- Ojo abierto -->
-            <i class="fas fa-eye-slash" id="eye-closed" style="display: none;"></i> <!-- Ojo cerrado -->
-        </span>
     </div>
-
-    <br><br>
+    <span class="toggle-visibility" onclick="togglePasswordVisibility()">
+        <i class="fas fa-eye" id="eye-open"></i> <!-- Ojo abierto -->
+        <i class="fas fa-eye-slash" id="eye-closed" style="display: none;"></i> <!-- Ojo cerrado -->
+    </span>
 
     <!-- Checkbox para Ambiente SAND -->
     <label for="ambiente_sand">
-        <input type="checkbox" id="ambiente_sand" name="ambiente_sand">
         Ambiente SAND
+        <input type="checkbox" id="ambiente_sand" name="ambiente_sand">
     </label>
-
-    <br><br>
 
     <!-- Botón de Login -->
     <button type="button" onclick="logIn()">Log in</button>
 
-    <br><br>
+    <!-- Mensaje de log in exitoso -->
+    <div id="loginSuccessMessage" class="success-message">
+        Log in exitoso.
+    </div>
+    <!-- Mensaje de log in fallido -->
+    <div id="loginErrorMessage" class="error-message">
+        Log in Fallido.
+    </div>
 
     <!-- Respuesta del Token de LogIn -->
     <pre id="logInTokenResponse"></pre>
     <pre id="refreshAccessTokenResponse"></pre>
-
-    <br><br>
 
     <!-- Contenedor Flex para botones y campos -->
     <div class="flex-container">
@@ -63,8 +66,6 @@
         <!-- Campo para mostrar mensaje de error obtenido al buscar cuentas -->
         <pre id="accountsErrormessage" style="color: red; margin: 0;"></pre>
     </div>
-
-    <br><br>
 
     <!-- Contenedor Flex para los campos de fecha y ticker -->
     <div class="flex-container">
@@ -82,8 +83,6 @@
         </div>
     </div>
 
-    <br><br>
-
     <!-- Contenedor Flex para el botón de buscar movimientos -->
     <div class="flex-container">
         <!-- Botón para buscar movimientos -->
@@ -91,8 +90,6 @@
         <!-- Campo para mostrar mensaje de error obtenido al buscar movimientos -->
         <pre id="movementsErrormessage" style="color: red; margin: 0;"></pre>
     </div>
-
-    <br><br>
 
     <!-- Tabla para mostrar los movimientos -->
     <table id="movimientos" border="1">

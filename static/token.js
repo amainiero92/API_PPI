@@ -43,13 +43,19 @@ function refreshAccessToken() {
                 if (data.accessToken) {
                     window.accessToken = data.accessToken;
                     document.getElementById('refreshAccessTokenResponse').innerText = 'Access Token: ' + data.accessToken;
+                    showLoginSuccessMessage();
                 } else {
                     document.getElementById('refreshAccessTokenResponse').innerText = 'Error: ' + data.error;
+                    showLoginErrorMessage();
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                showLoginErrorMessage();
+            });
     } else {
         document.getElementById('refreshAccessTokenResponse').innerText = 'No refresh token available.';
+        showLoginErrorMessage();
     }
 }
 
@@ -180,5 +186,51 @@ function togglePasswordVisibility()
         passwordInput.type = 'password';
         eyeOpen.style.display = 'inline';
         eyeClosed.style.display = 'none';
+    }
+}
+
+// Init layout
+document.addEventListener("DOMContentLoaded", function() 
+{
+    // Se ocultan campos de mensajes
+    var logInTokenResponse = document.getElementById("logInTokenResponse");
+    if (logInTokenResponse) {
+        logInTokenResponse.style.display = "none";
+    }
+    var refreshAccessTokenResponse = document.getElementById("refreshAccessTokenResponse");
+    if (refreshAccessTokenResponse) {
+        refreshAccessTokenResponse.style.display = "none";
+    }
+    var accountsErrormessage = document.getElementById("accountsErrormessage");
+    if (accountsErrormessage) {
+        accountsErrormessage.style.display = "none";
+    }
+    var movementsErrormessage = document.getElementById("movementsErrormessage");
+    if (movementsErrormessage) {
+        movementsErrormessage.style.display = "none";
+    }
+    var loginSuccessMessage = document.getElementById("loginSuccessMessage");
+    if (loginSuccessMessage) {
+        loginSuccessMessage.style.display = "none";
+    }
+    var loginErrorMessage = document.getElementById("loginErrorMessage");
+    if (loginErrorMessage) {
+        loginErrorMessage.style.display = "none";
+    }
+});
+
+function showLoginSuccessMessage() 
+{
+    var successMessage = document.getElementById("loginSuccessMessage");
+    if (successMessage) {
+        successMessage.style.display = "block";
+    }
+}
+
+function showLoginErrorMessage() 
+{
+    var successMessage = document.getElementById("loginErrorMessage");
+    if (successMessage) {
+        successMessage.style.display = "block";
     }
 }

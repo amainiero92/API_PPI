@@ -29,7 +29,6 @@ input[type="text"],
 input[type="password"],
 input[type="date"],
 select {
-    width: 100%;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
@@ -64,7 +63,6 @@ Mejor alineación y aspecto del campo de contraseña. */
 .password-container {
     position: relative;
     display: inline-flex;
-    width: 100%;
 }
 
 .password-container input {
@@ -124,6 +122,30 @@ pre {
     border-radius: 4px;
     color: #d9534f;
     margin-top: 10px;
+}
+
+/* Estilo para el mensaje de éxito */
+.success-message {
+    padding: 10px;
+    background-color: #d4edda; /* Color de fondo verde claro */
+    color: #155724; /* Color del texto verde oscuro */
+    border: 1px solid #c3e6cb; /* Borde verde claro */
+    border-radius: 4px;
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Estilo para el mensaje de éxito */
+.error-message {
+    padding: 10px;
+    background-color: #d30e0e; /* Color de fondo verde claro */
+    color: #000000; /* Color del texto verde oscuro */
+    border: 1px solid #c3e6cb; /* Borde verde claro */
+    border-radius: 4px;
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
 }
 
 /* Estilo para el Contenedor de Botones y Campos:
