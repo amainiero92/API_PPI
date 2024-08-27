@@ -1,9 +1,21 @@
+/* Se incerta el logo de PPI al margen Derecho */
+
+img {
+    width: 25%;            /* Hace que la imagen ocupe todo el ancho del contenedor */
+    display: block;        /* Asegura que no haya espacio blanco debajo de la imagen */
+    margin: 0;             /* Elimina cualquier margen por defecto */
+    padding: 0;            /* Elimina cualquier relleno por defecto */
+    border: none;          /* Elimina cualquier borde */
+    background: none;      /* Elimina cualquier fondo */
+    float: right;          /* Alinea la imagen a la derecha */
+}
+
 /* Estilo General del Body:
 Mejora el espaciado, la tipografía y el aspecto general de la página. */
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #ffffff;
     margin: 0;
     padding: 20px;
     color: #333;
@@ -44,7 +56,7 @@ input[type="checkbox"] {
 Mejora la apariencia del botón para que sea más destacado. */
 
 button {
-    background-color: #4CAF50;
+    background-color: #3152aa;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -54,7 +66,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #3152aa;
 }
 
 /* Estilo para los Contenedores de Password:
@@ -62,22 +74,27 @@ Mejor alineación y aspecto del campo de contraseña. */
 
 .password-container {
     position: relative;
-    display: inline-flex;
-}
+    display: flex;
+    max-width: 40%;
+    }
 
 .password-container input {
     flex: 1;
-    padding-right: 40px; /* Espacio para el ícono del ojo */
+    padding-right: 40px; /* Espacio adicional para el ícono del ojo */
+    border: 1px solid #ccc; /* Opcional: Agrega un borde para que el campo sea visible */
+    border-radius: 4px; /* Opcional: Redondea las esquinas del campo */
+    box-sizing: border-box; /* Incluye el padding y el borde en el tamaño total del campo */
 }
 
 .password-container .toggle-visibility {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 10px; /* Espacio desde el borde derecho del contenedor */
+    top: 50%; /* Centro verticalmente en el contenedor */
+    transform: translateY(-50%); /* Ajusta el ícono verticalmente */
     cursor: pointer;
     font-size: 18px;
     color: #888;
+    z-index: 1; /* Asegura que el ícono esté encima del campo de entrada */
 }
 
 .password-container .toggle-visibility:hover {
@@ -128,8 +145,8 @@ pre {
 .success-message {
     padding: 10px;
     background-color: #d4edda; /* Color de fondo verde claro */
-    color: #155724; /* Color del texto verde oscuro */
-    border: 1px solid #c3e6cb; /* Borde verde claro */
+    color: #214668; /* Color del texto azul oscuro */
+    border: 1px solid #c3e6cb; /* Borde azul claro */
     border-radius: 4px;
     margin-top: 10px;
     font-size: 16px;
@@ -151,9 +168,28 @@ pre {
 /* Estilo para el Contenedor de Botones y Campos:
 Mejor alineación y espaciado de los botones y otros campos de formulario. */
 
+
+
 .flex-container {
     display: flex;
     gap: 20px;
+    align-items: center;
+}
+
+.flex-container div {
+    flex: 1;
+}
+
+button[type="button"] {
+    flex-shrink: 0;
+}
+
+/* Estilo para el Contenedor de Botones y Campos:
+Mejor alineación y espaciado de los botones y otros campos de formulario. */
+
+.flex-container-line {
+    display: flex;
+    gap: 5px;
     align-items: center;
 }
 
@@ -182,4 +218,14 @@ Asegura que el formulario se vea bien en dispositivos móviles. */
         width: 100%;
         margin-bottom: 10px;
     }
+}
+
+/* Agrega espacios y se configura el alto del espacio */
+
+.espacio {
+    height: 40px; /* Ajusta la altura del espacio según lo necesites */
+}
+
+.espacio-corto {
+    height: 10px; /* Ajusta la altura del espacio según lo necesites */
 }

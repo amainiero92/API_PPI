@@ -11,9 +11,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
     <!-- Inclusiones CSS adicionales -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <img src="https://brokersrecomendados.com/wp-content/uploads/portfolio-personal-inversiones-comentarios.png" alt="Una foto interesante">
+
 </head>
 
 <body>
+
+    <div class="espacio-corto"></div> <!-- ESPACIO EN LARGO -->
 
     <h1>Ingresá tus credenciales</h1>
 
@@ -33,11 +38,16 @@
         <i class="fas fa-eye-slash" id="eye-closed" style="display: none;"></i> <!-- Ojo cerrado -->
     </span>
 
+    <div class="espacio-corto"></div> <!-- ESPACIO EN LARGO -->
+
     <!-- Checkbox para Ambiente SAND -->
     <label for="ambiente_sand">
+    <div class="ambiente_sand"></div>
         Ambiente SAND
         <input type="checkbox" id="ambiente_sand" name="ambiente_sand">
     </label>
+
+    <div class="espacio"></div> <!-- ESPACIO EN LARGO -->
 
     <!-- Botón de Login -->
     <button type="button" onclick="logIn()">Log in</button>
@@ -67,8 +77,10 @@
         <pre id="accountsErrormessage" style="color: red; margin: 0;"></pre>
     </div>
 
+    <div class="espacio"></div> <!-- ESPACIO EN LARGO -->
+
     <!-- Contenedor Flex para los campos de fecha y ticker -->
-    <div class="flex-container">
+    <div class="flex-container-line">
         <div>
             <label for="date_from">DateFrom:</label>
             <input type="date" id="date_from" name="date_from">
@@ -82,7 +94,7 @@
             <input type="text" id="ticker" name="ticker">
         </div>
     </div>
-
+    
     <!-- Contenedor Flex para el botón de buscar movimientos -->
     <div class="flex-container">
         <!-- Botón para buscar movimientos -->
