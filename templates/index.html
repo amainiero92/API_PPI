@@ -123,6 +123,43 @@
         </tbody>
     </table>
 
+    <div class="espacio"></div> <!-- ESPACIO EN LARGO -->
+
+<!-- Contenedor Flex para el botón de buscar Balance y Posiciones -->
+<div class="flex-container">
+    <!-- Botón para buscar Balance y Posiciones -->
+    <button type="button" onclick="ObtenerBalanceYposiciones()">Traer Balance y Posiciones</button>
+    
+
+    <table id="availabilityTable">
+        <thead>
+            <tr>
+                <th>Currency</th>
+                <th>Name</th>
+                <th>Symbol</th>
+                <th>Amount</th>
+                <th>Settlement</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    
+    <table id="instrumentsTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Ticker</th>
+                <th>Description</th>
+                <th>Currency</th>
+                <th>Price</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    
+</div>
+
 </body>
 
 </html>

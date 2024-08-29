@@ -192,3 +192,36 @@ def get_account_movements():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+        ############################### Balance y Movimientos ###############################
+        
+@app.route('/ObtenerBalanceYposiciones', methods=['POST']) 
+def ObtenerBalanceYposiciones():
+    isSandEnvironment = request.json.get('ambiente_sand')
+    accountNumber = request.json.get('accounts')
+    app.logger.info(isSandEnvironment) 
+    getByPUrl = "api/1.0/Account/BalancesAndPositions?accountNumber=" + accountNumber  
+    app.logger.info(getByPUrl)
+    credentials = getCredentials(isSandEnvironment, getByPUrl)
+
+    app.logger.info(credentials["authorizedClient"])
+    app.logger.info(credentials["clientKey"])
+    app.logger.info(credentials["url"])
+
+    headers = {
+        "AuthorizedClient": credentials["authorizedClient"],
+        "ClientKey": credentials["clientKey"],
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + stored_access_token
+    }
+
+    response = requests.get(credentials["url"], headers=headers, verify=False)
+
+    if response.status_code == 200:
+        return jsonify(response.json())
+    else:
+        return jsonify({'error': 'Error en la solicitud', 'status_code': response.status_code, 'response': response.text})
+
+if __name__ == '__main__':
+    app.run(debug=True)

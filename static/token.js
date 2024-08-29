@@ -234,3 +234,66 @@ function showLoginErrorMessage()
         successMessage.style.display = "block";
     }
 }
+
+// Obtener Balance y posiciones
+
+function ObtenerBalanceYposiciones() { //vinculo con HTML
+    const movPosErrormessage = document.getElementById('movPosErrormessage');
+    const availabilityTableBody = document.querySelector('#availabilityTable tbody');
+    const instrumentsTableBody = document.querySelector('#instrumentsTable tbody');
+    availabilityTableBody.innerHTML = ''; // Limpiar tabla
+    instrumentsTableBody.innerHTML = ''; // Limpiar tabla
+
+    if (window.accessToken) {
+        fetch('/ObtenerBalanceYposiciones', { // Llama a la función de Python
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + window.accessToken
+            },
+            body: JSON.stringify({
+                'ambiente_sand': document.getElementById("ambiente_sand").checked,
+                'accounts': document.getElementById("accounts").value
+            })
+        })
+        .then(response => response.json()) // Convierte la respuesta a JSON
+        .then(data => {
+            if (data.error) {
+                movPosErrormessage.innerText = data.error; // Muestra el mensaje de error si ocurre
+            } else {
+                // Procesa y muestra los datos en las tablas
+                data.groupedAvailability.forEach(group => {
+                    group.availability.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${group.currency}</td>
+                            <td>${item.name}</td>
+                            <td>${item.symbol}</td>
+                            <td>${item.amount.toFixed(2)}</td>
+                            <td>${item.settlement}</td>
+                        `;
+                        availabilityTableBody.appendChild(row);
+                    });
+                });
+
+                data.groupedInstruments.forEach(group => {
+                    group.instruments.forEach(instrument => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${group.name}</td>
+                            <td>${instrument.ticker}</td>
+                            <td>${instrument.description}</td>
+                            <td>${instrument.currency}</td>
+                            <td>${instrument.price.toFixed(2)}</td>
+                            <td>${instrument.amount.toFixed(2)}</td>
+                        `;
+                        instrumentsTableBody.appendChild(row);
+                    });
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        movPosErrormessage.innerText = 'No access token available.';
+    }
+}
