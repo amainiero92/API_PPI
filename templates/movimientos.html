@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Movimientos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <script src="{{ url_for('static', filename='token.js') }}" defer></script>
+</head>
+
+<body>
+
+    <h1>Buscar Movimientos</h1>
+
+    <!-- Contenedor Flex para botones y campos -->
+    <div class="flex-container">
+        <!-- Botón para obtener las cuentas -->
+        <button type="button" onclick="fetchAccounts()">Obtener Cuentas</button>
+        <!-- Campo de lista para las cuentas -->
+        <select id="accounts">
+            <option value="">Seleccione una cuenta</option>
+        </select>
+        <!-- Campo para mostrar mensaje de error obtenido al buscar cuentas -->
+        <pre id="accountsErrormessage" style="color: red; margin: 0;"></pre>
+    </div>
+
+    <div class="espacio"></div> <!-- ESPACIO EN LARGO -->
+
+    <!-- Contenedor Flex para los campos de fecha y ticker -->
+    <div class="flex-container-line">
+        <div>
+            <label for="date_from">DateFrom:</label>
+            <input type="date" id="date_from" name="date_from">
+        </div>
+        <div>
+            <label for="date_to">DateTo:</label>
+            <input type="date" id="date_to" name="date_to">
+        </div>
+        <div>
+            <label for="ticker">Ticker:</label>
+            <input type="text" id="ticker" name="ticker">
+        </div>
+    </div>
+
+    <!-- Contenedor Flex para el botón de buscar movimientos -->
+    <div class="flex-container">
+        <!-- Botón para buscar movimientos -->
+        <button type="button" onclick="getAccountMovements()">Buscar Movimientos</button>
+        <!-- Campo para mostrar mensaje de error obtenido al buscar movimientos -->
+        <pre id="movementsErrormessage" style="color: red; margin: 0;"></pre>
+    </div>
+
+    <!-- Tabla para mostrar los movimientos -->
+    <table id="movimientos" border="1">
+        <thead>
+            <tr>
+                <th>AgreementDate</th>
+                <th>SettlementDate</th>
+                <th>Moneda</th>
+                <th>Amount</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Ticker</th>
+                <th>Quantity</th>
+                <th>Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se insertarán las filas de datos -->
+        </tbody>
+    </table>
+
+    <div class="espacio"></div> <!-- ESPACIO EN LARGO -->
+
+    <h1>Balance y posiciones</h1>
+
+    <!-- Contenedor Flex para el botón de buscar Balance y Posiciones -->
+    <div class="flex-container">
+        <!-- Botón para buscar Balance y Posiciones -->
+        <button type="button" onclick="ObtenerBalanceYposiciones()">Traer Balance y Posiciones</button>
+
+
+        <table id="availabilityTable">
+            <thead>
+                <tr>
+                    <th>Currency</th>
+                    <th>Name</th>
+                    <th>Symbol</th>
+                    <th>Amount</th>
+                    <th>Settlement</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <table id="instrumentsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Ticker</th>
+                    <th>Description</th>
+                    <th>Currency</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+    </div>
+
+</body>
+
+</html>

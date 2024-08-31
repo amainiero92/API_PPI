@@ -52,6 +52,12 @@ def getCredentials(sandEnvironment, method):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+############################### Execute movimientos HTML page ###############################
+
+@app.route('/movimientos')
+def movimientos():
+    return render_template('movimientos.html')
     
 ############################### Log in function ###############################
 

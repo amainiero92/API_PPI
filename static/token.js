@@ -44,6 +44,8 @@ function refreshAccessToken() {
                     window.accessToken = data.accessToken;
                     document.getElementById('refreshAccessTokenResponse').innerText = 'Access Token: ' + data.accessToken;
                     showLoginSuccessMessage();
+                    // Redirigir a la nueva página
+                    window.location.href = '/movimientos';  // Ajusta la URL según sea necesario
                 } else {
                     document.getElementById('refreshAccessTokenResponse').innerText = 'Error: ' + data.error;
                     showLoginErrorMessage();
